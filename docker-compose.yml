@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "${WEB_PORT}:80"
+    volumes:
+      - ./vosale:/var/www/html        # ← mount seluruh project
+    env_file:
+      - .env
+
+volumes:
+  db_data:
