@@ -1,0 +1,17 @@
+name: Deploy to cPanel
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ftp.vosalestorage.com
+          username: cpanel-vosalest
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./vosale
+          server-dir: /public_html
